@@ -20,8 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        GMSServices.provideAPIKey("AIzaSyDOk2yQ4zxnkEzmzlI263Hh14htvxQG5ao")
-        GMSPlacesClient.provideAPIKey("AIzaSyDOk2yQ4zxnkEzmzlI263Hh14htvxQG5ao")
+        GMSServices.provideAPIKey("YOUR API KEY")
+        GMSPlacesClient.provideAPIKey("YOUR API KEY")
         FirebaseApp.configure()
         
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
