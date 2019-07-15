@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>947428001845-v7vfmb4cseijo70fvmhp1ioofjfv849v.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.947428001845-v7vfmb4cseijo70fvmhp1ioofjfv849v</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>947428001845-ji4hdmoe24ku4oatqgj8t791ijobr90i.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDlDIgHtMI0Dm8ETMnJ3udvQFmol-C9pkE</string>
+	<key>GCM_SENDER_ID</key>
+	<string>947428001845</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>App.Baazr</string>
+	<key>PROJECT_ID</key>
+	<string>newb-16ace</string>
+	<key>STORAGE_BUCKET</key>
+	<string>newb-16ace.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:947428001845:ios:27e4c1391e9a726b</string>
+	<key>DATABASE_URL</key>
+	<string>https://newb-16ace.firebaseio.com</string>
+</dict>
+</plist>

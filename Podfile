@@ -1,0 +1,18 @@
+source 'https://github.com/CocoaPods/Specs.git'
+target 'Baazr' do
+  pod 'GoogleMaps'
+  pod 'GooglePlaces'
+  pod 'Firebase/Core'
+  pod 'Firebase/Messaging'
+  pod 'Firebase/Database'
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Storage'
+  pod 'Firebase'
+  pod 'Google-Maps-iOS-Utils'
+  pod 'GoogleSignIn'
+  pod 'Kingfisher', '~> 5.0'
+  pod 'Lightbox'
+  pod 'ImageScrollView'
+  pod 'SVGKit'
+end
