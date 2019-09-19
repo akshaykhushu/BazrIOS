@@ -44,7 +44,7 @@ class Toast {
         UIView.animate(withDuration: 0.5, delay: 0.0, options: .curveEaseIn, animations: {
             toastContainer.alpha = 1.0
         }, completion: { _ in
-            UIView.animate(withDuration: 0.5, delay: 1.5, options: .curveEaseOut, animations: {
+            UIView.animate(withDuration: 0.5, delay: 4.0, options: .curveEaseOut, animations: {
                 toastContainer.alpha = 0.0
             }, completion: {_ in
                 toastContainer.removeFromSuperview()

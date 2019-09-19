@@ -13,9 +13,11 @@ import GoogleMaps
 class POIItem: NSObject, GMUClusterItem {
     var position: CLLocationCoordinate2D
     var title: String!
+    var state: String!
     
-    init(position: CLLocationCoordinate2D, title: String) {
+    init(position: CLLocationCoordinate2D, title: String, state: String) {
         self.position = position
         self.title = title
+        self.state = state
     }
 }

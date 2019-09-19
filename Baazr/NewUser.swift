@@ -23,18 +23,27 @@ class NewUser: UIViewController, GIDSignInUIDelegate {
     @IBOutlet weak var alreadyCreatedUserEmailID: UITextField!
     @IBOutlet var RegisterUserView: UIView!
     
+    @IBOutlet weak var GuestSignIn: UIButton!
+    
+    //Google sign in code is written in the AppDelegate.swift file
     @IBAction func googleSignInButtonPressed(_ sender: Any) {
 
-//        GIDSignIn.sharedInstance().signIn()
+//        GIDSignIn.sharedInstance()!.signIn()
     }
     
     @IBAction func registerViewCancelBtn(_ sender: Any) {
         RegisterUserView.removeFromSuperview()
     }
     
+    @IBAction func guestSignInMethod(_ sender: Any) {
+        MapsViewController.isGuest = true
+        MapsViewController.userEmailId = "Guest"
+        self.performSegue(withIdentifier: "OpenBaazr", sender: self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         GIDSignIn.sharedInstance().uiDelegate = self
         
         let screenSize = UIScreen.main.bounds
@@ -122,32 +131,25 @@ class NewUser: UIViewController, GIDSignInUIDelegate {
             return
         }
         self.view.endEditing(true)
-        Auth.auth().addStateDidChangeListener { (auth, user) in
-            if(user == nil){
-                Toast.show(message: "Please Verify your email", controller: self)
-                return
+        
+        MapsViewController.isGuest = false
+        
+        Auth.auth().signIn(withEmail: self.self.alreadyCreatedUserEmailID.text!, password: self.self.alreadyCreatedUserPassword.text!) { (authResult, error) in
+            if let authResult = authResult {
+                let user = authResult.user
+                print("User has Signed In")
+                if user.isEmailVerified {
+                    self.performSegue(withIdentifier: "OpenBaazr", sender: self)
+                } else {
+                    // do whatever you want to do when user isn't verified
+                    Toast.show(message: "Please Verify your email", controller: self)
+                    return
+                }
             }
-            
-            if (user!.isEmailVerified) {
-                Auth.auth().signIn(withEmail: self.alreadyCreatedUserEmailID.text!, password: self.alreadyCreatedUserPassword.text!, completion: { (user, error) in
-                    if (user != nil) {
-                        
-                        print("Sign In Successful")
-                        
-                        self.performSegue(withIdentifier: "OpenBaazr", sender: self)
-                        return
-                    }
-                    else {
-                        if let myerror = error?.localizedDescription{
-                            print(myerror)
-                        }
-                        else{
-                            print("Error")
-                            return
-                        }
-                        return
-                    }
-                })
+            if let error = error {
+                
+                Toast.show(message: "Invalid Email ID/ Password. Please register if new user.", controller: self)
+                return
             }
         }
         

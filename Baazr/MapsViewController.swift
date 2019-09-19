@@ -13,6 +13,7 @@ import CoreLocation
 import AVFoundation
 import Firebase
 import Lightbox
+import CoreLocation
 
 class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate, UITextViewDelegate, GMUClusterManagerDelegate, UINavigationControllerDelegate, GMUClusterRendererDelegate, UIImagePickerControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, UIPickerViewDelegate, UIPickerViewDataSource{
     
@@ -22,6 +23,13 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     //***************************
     
+    @IBOutlet var helpView: UIView!
+    @IBOutlet weak var plusBtn: UIButton!
+    @IBOutlet weak var uploadBtn: UIButton!
+    @IBOutlet weak var switchTemp: UISwitch!
+    @IBOutlet var buttonState: UIButton!
+    @IBOutlet weak var markerViewLabel: UILabel!
+    @IBOutlet var markerView: UIView!
     @IBOutlet weak var transparentButton: UIButton!
     @IBOutlet weak var currencyPicker: UIPickerView!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -30,7 +38,7 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     @IBOutlet var menuBar: UIView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet var markerViewMap: UIView!
-    
+    public static var isGuest : Bool = true
     @IBOutlet weak var mainSearchButton: UIButton!
     @IBOutlet weak var signOutBtn: UIButton!
     
@@ -43,14 +51,17 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     @IBOutlet var newMarker: UIView!
     //***************************
     
+    public static var settingsGuest : String = "Sign Out"
     @IBOutlet weak var listBtn: UIButton!
-    var storageRef: StorageReference?
+    public static var storageRef: StorageReference?
     var ref : DatabaseReference?
-    var user : User?
+    public static var user : User?
+    public static var userEmailId : String = ""
+    var permission = false
     var databaseHandle: DatabaseHandle?
     var postData = [String]()
     public static var markerList = [Marker]()
-    @IBOutlet weak var takepictureBtn: UIButton!
+//    @IBOutlet weak var takepictureBtn: UIButton!
     var locationManager = CLLocationManager()
     var currentLocation: CLLocation?
     var mapView: GMSMapView!
@@ -75,7 +86,7 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     var uploadDict: [String: String] = [:]
     var idTitleMap : [String: Marker] = [:]
 
-    @IBOutlet weak var takePictureBtn: UIButton!
+    @IBOutlet var takePictureBtn: UIButton!
     
     let currency = ["$", "₹", "€", "¥", "£"]
     
@@ -107,7 +118,17 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         self.performSegue(withIdentifier: "SearchListView", sender: self)
     }
     
+    
+    
     func signout() {
+        
+        MapsViewController.userEmailId = ""
+        if(MapsViewController.isGuest){
+            
+            self.performSegue(withIdentifier: "SignOut", sender: self)
+            return
+        }
+        self.buttonState.removeFromSuperview()
         let firebaseAuth = Auth.auth()
         do {
             try firebaseAuth.signOut()
@@ -115,7 +136,9 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
             print ("Error signing out: %@", signOutError)
         }
         
-        self.performSegue(withIdentifier: "SignOut", sender: self)
+        self.idTitleMap.removeAll()
+        MapsViewController.markerList.removeAll()
+        
     }
     @IBAction func newPictureButtonPressed(_ sender: Any) {
         self.newpicturebtn()
@@ -131,7 +154,10 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     }
     
     @IBAction func morePicturesBtnPressed(_ sender: Any) {
-        saveBtnPressed()
+        if (saveBtnPressed() == "Error"){
+            Toast.show(message: "Please enter All the values", controller: self)
+            return
+        }
         noOfImages += 1
         
         self.titleTextView.text = ""
@@ -145,16 +171,16 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         present(imagePicker, animated: true, completion: nil)
     }
     
-    func saveBtnPressed() {
+    func saveBtnPressed() -> String {
         if (self.titleTextView.text! == nil || self.titleTextView.text! == "") {
             self.costName = true
             Toast.show(message: "Please enter title", controller: self)
-            return
+            return "Error"
         }
         if (self.costTextView.text! == nil || self.costTextView.text! == "") {
             self.costName = true
             Toast.show(message: "Please enter cost", controller: self)
-            return
+            return "Error"
         }
         else if (self.costTextView.text! != nil ) {
             let letters = NSCharacterSet.letters
@@ -164,23 +190,24 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
             if range != nil {
                 self.costName = true
                 Toast.show(message: "Invalid cost value", controller: self)
-                return
+                return "Error"
             }
         }
         
         if (self.descTextView.text! == nil || self.descTextView.text! == "") {
             Toast.show(message: "Please enter description", controller: self)
-            return
+            return "Error"
         }
         costList.append(self.currencyUsed + costTextView.text!)
         titleMarker = titleTextView.text!
         descList.append(descTextView.text!)
+        return "All Good"
     }
     
     @IBAction func uploadBtnPressed(_ sender: Any) {
         saveBtnPressed()
         var ref: DatabaseReference!
-        ref = Database.database().reference().child(user!.uid)
+        ref = Database.database().reference().child(MapsViewController.user!.uid)
         
         if (self.costName){
             return
@@ -190,10 +217,11 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
             uploadDict["Cost\(i)"] = self.costList[i]
             uploadDict["Description\(i)"] = self.descList[i]
         }
-        uploadDict["Id"] = self.user!.uid
+        uploadDict["Id"] = MapsViewController.user!.uid
         uploadDict["LocationLati"] = String(MapsViewController.latitude)
         uploadDict["LocationLong"] = String(MapsViewController.longitude)
         uploadDict["Title"] = self.titleMarker
+        uploadDict["State"] = "open"
         uploadDict["TotalImages"] = String(self.imageList.count)
         
         ref.setValue(uploadDict)
@@ -220,7 +248,7 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     let cellId = "cellId"
     
     let settings: [Setting] = {
-        return [Setting(name: "Take a new image"), Setting(name: "List View"), Setting(name: "Help"), Setting(name: "Terms and Conditions"), Setting(name: "Log Out")]
+        return [Setting(name: "User: " + MapsViewController.userEmailId), Setting(name: "Take a new image"), Setting(name: "List View"), Setting(name: MapsViewController.settingsGuest)]
     }()
     
     @IBAction func MoreButtonPressed(_ sender: Any) {
@@ -229,7 +257,7 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
             blackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleDismiss)))
             window.addSubview(blackView)
             window.addSubview(collectionView)
-            let height: CGFloat = CGFloat(settings.count * 50)
+            let height: CGFloat = CGFloat(settings.count * 60)
             let y = window.frame.height - height
             collectionView.frame = CGRect(x: 0, y: window.frame.height, width: window.frame.width, height: height)
             blackView.frame = window.frame
@@ -245,6 +273,7 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         }
     }
     
+    //Code for dismissing the slider view
     @objc func handleDismiss(settings: Setting) {
         UIView.animate(withDuration: 0.5) {
             self.blackView.alpha = 0
@@ -256,8 +285,6 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
     
     
     }
-    
-    
     
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -275,24 +302,67 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         return CGSize(width: collectionView.frame.width, height: 50)
     }
     
+    //Used for checking what element was pressed in the slider view
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let setting = self.settings[indexPath.item]
 //        print("\n\n\n\n\n\n\n\(setting.name)")
         handleDismiss(settings: setting)
         
-        if setting.name == "Log Out" {
+        if setting.name == "Sign Out"{
             self.signout()
         }
         else if setting.name == "List View" {
             self.listviewbtn()
         }
         else if setting.name == "Take a new image" {
-            self.newpicturebtn()
+            if (MapsViewController.isGuest){
+                Toast.show(message: "Please Sign In to post", controller: self)
+            }
+            else{
+                self.newpicturebtn()
+            }
         }
+        else if setting.name == "Sign In"{
+            self.signout()
+        }
+    }
+    
+    //open the help view
+    func help() {
+        self.view.addSubview(helpView)
     }
     
     
     
+    
+    
+    
+    //changes the state of the marker
+    @IBAction func changeState(_ sender: Any) {
+        
+        var ref: DatabaseReference!
+        ref = Database.database().reference().child(MapsViewController.user!.uid)
+        print(MapsViewController.user!.uid)
+        print(idTitleMap[MapsViewController.user!.uid]!)
+//        print(idTitleMap[MapsViewController.user!.uid]!.latitide)
+        let camera = GMSCameraPosition.camera(withLatitude: Double(idTitleMap[MapsViewController.user!.uid]!.latitide) as! CLLocationDegrees, longitude: Double(idTitleMap[MapsViewController.user!.uid]!.longitude) as! CLLocationDegrees, zoom: 17)
+        
+        self.mapView.animate(to: camera)
+//
+        
+        if (self.buttonState.currentTitle! == "I am Open" ) {
+            self.buttonState.setTitle("I am Closed", for: .normal)
+            ref.child("State").setValue("closed")
+            
+        }
+        else{
+            self.buttonState.setTitle("I am Open", for: .normal)
+            ref.child("State").setValue("open")
+        }
+    }
+    
+    
+    //Called as soon as the user clicks the picture and presses ok
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         
         self.view.addSubview(newMarker)
@@ -305,7 +375,7 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         let metadata = StorageMetadata()
         metadata.contentType = "image/jpeg"
         
-        let imageRef = storageRef!.child("Image\(noOfImages)")
+        let imageRef = MapsViewController.storageRef!.child("Image\(noOfImages)")
         
         let uploadTask = imageRef.putData(data!, metadata: metadata ) { (metadata, error) in
             guard let metadata = metadata else {
@@ -327,6 +397,7 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
 
     }
     
+    //Called when going from one view controller to another
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         if (segue.identifier == "MarkerClicked" ){
@@ -363,7 +434,7 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         self.performSegue(withIdentifier: "ListView", sender: self)
     }
     
-    
+    //Used for wrtiting text on marker
     func drawText(text:String, inImage:UIImage) -> UIImageView {
         
         
@@ -412,31 +483,25 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         }
     }
     
-    
-    override func viewDidLoad() {
-        
-        super.viewDidLoad()
+    //Main function of this file. Sets up the UI of the app, downloads the marker data from firebase and display it on the map
+    func restOfCode(){
         ref = Database.database().reference()
-        
-        self.user = Auth.auth().currentUser
-        
-        print("\n\n\nUserId")
-            print(user!.uid)
-        
         
         let screenSize = UIScreen.main.bounds
         
         self.menuBar.frame.size.width = screenSize.width
         
+//        print(MapsViewController.user!.uid)
         self.menuBar.removeFromSuperview()
         
         self.markerViewMap.frame.size.width = screenSize.width
         self.markerViewMap.frame.size.height = screenSize.height
         
-        
         self.newMarker.frame.size.width = screenSize.width
         self.newMarker.frame.size.height = screenSize.height
         
+        self.helpView.frame.size.width = screenSize.width
+        self.helpView.frame.size.height = screenSize.height
         
         MapsViewController.markerList.removeAll()
         
@@ -457,46 +522,63 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         descTextView.text = "Description"
         descTextView.textColor = UIColor.lightGray
         
-        self.locationManager = CLLocationManager()
-        self.locationManager.delegate = self
-        //        locationManager.requestLocation()
-        self.locationManager.requestWhenInUseAuthorization()
-        self.locationManager.startUpdatingLocation()
-        self.locationManager.startMonitoringSignificantLocationChanges()
         
-        MapsViewController.longitude = self.locationManager.location!.coordinate.longitude as! Double
-        MapsViewController.latitude = self.locationManager.location!.coordinate.latitude as! Double
-        
-        let camera = GMSCameraPosition.camera(withLatitude: self.locationManager.location!.coordinate.latitude, longitude: self.locationManager.location!.coordinate.longitude, zoom: 17)
+        let camera = GMSCameraPosition.camera(withLatitude: MapsViewController.latitude, longitude: MapsViewController.longitude, zoom: 17)
         
         self.mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
         self.mapView.isMyLocationEnabled = true
         self.mapView.settings.myLocationButton = true
-//        self.mapView.delegate = self
-        view = self.mapView
+
+        self.view = self.mapView
+        
+//        self.view.layoutIfNeeded()
+        
+        self.view.frame.size.width = self.mapView.frame.size.width
+        self.view.frame.size.height = self.mapView.frame.size.height
+        
+        
+        
         
         let iconGenerator = GMUDefaultClusterIconGenerator()
-//        let algo = GMUGridBasedClusterAlgorithm()
+        //        let algo = GMUGridBasedClusterAlgorithm()
         let algorithm = GMUNonHierarchicalDistanceBasedAlgorithm()
-//        let renderer = GMUDefaultClusterRenderer(mapView: self.mapView,
-//                                                 clusterIconGenerator: iconGenerator)
+        //        let renderer = GMUDefaultClusterRenderer(mapView: self.mapView,
+        //                                                 clusterIconGenerator: iconGenerator)
         
         let renderer = GMUDefaultClusterRenderer(mapView: self.mapView, clusterIconGenerator: iconGenerator)
         renderer.delegate = self
         self.clusterManager = GMUClusterManager(map: self.mapView, algorithm: algorithm,
-                                           renderer: renderer)
+                                                renderer: renderer)
         
         self.clusterManager.setDelegate(self, mapDelegate: self)
-        self.view.addSubview(takePictureBtn)
-//        self.takePictureBtn.bottomAnchor.constraint(equalTo: self.transparentButton.topAnchor, constant: 30.0).isActive = true
         
         
+//                self.view.addSubview(self.takePictureBtn)
+        //        self.view.addSubview(stateSwitch)
+        
+        mainSearchButton.layer.cornerRadius = 0
+        mainSearchButton.layer.borderWidth = 0.5
+        mainSearchButton.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0).cgColor
+        currencyPicker.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0).cgColor
+        currencyPicker.layer.borderWidth = 0.5
+        
+        costTextView.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0).cgColor
+        costTextView.layer.borderWidth = 0.5
+        
+        titleTextView.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0).cgColor
+        titleTextView.layer.borderWidth = 0.5
+        
+        descTextView.layer.borderColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0).cgColor
+        descTextView.layer.borderWidth = 0.5
+        
+        uploadBtn.layer.cornerRadius = 5.0
+        plusBtn.layer.cornerRadius = 5.0
+        
+    
         setUpMenuBar()
         
         placesClient = GMSPlacesClient.shared()
         
-        let storage = Storage.storage()
-        self.storageRef = storage.reference().child(user!.uid)
         
         let connectedRef = Database.database().reference(withPath: ".info/connected")
         connectedRef.observe(.value, with: { snapshot in
@@ -507,9 +589,10 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
             }
         })
         
-        
         databaseHandle = ref?.observe(.value, with:{ (snapshot) in
             print("Hello World!")
+            self.clusterManager.clearItems()
+            MapsViewController.markerList.removeAll()
             for markers in snapshot.children.allObjects as! [DataSnapshot] {
                 var marker =  Marker()
                 let markerObject = markers.value as? [String: AnyObject]
@@ -517,7 +600,7 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
                 let markerId = markerObject?["Id"]
                 let markerLati = markerObject?["LocationLati"]
                 let markerLong = markerObject?["LocationLong"]
-                
+                let markerStatus = markerObject?["State"]
                 let markerTotalImages = markerObject?["TotalImages"]
                 let totalImages = Int(markerTotalImages as! String)!
                 marker.totalImages  = markerTotalImages as! String
@@ -525,6 +608,8 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
                 marker.id = markerId as! String
                 marker.longitude = markerLong as! String
                 marker.latitide = markerLati as! String
+                marker.state = markerStatus as! String
+                print(marker.state)
                 var bitmapList = [String]()
                 var costList = [String]()
                 var descList = [String]()
@@ -546,25 +631,138 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
                 
                 
                 MapsViewController.markerList.append(marker)
+                
+                
                 self.idTitleMap[marker.id] = marker
+                
+                print(self.idTitleMap[marker.id]!.title)
+            }
+            if(!MapsViewController.isGuest) {
+                print("\n\n\nisGuest : \t   \(MapsViewController.isGuest)")
+                self.view.addSubview(self.takePictureBtn)
+//                self.view.bringSubviewToFront(self.takePictureBtn)
+                self.takePictureBtn.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+
+                self.takePictureBtn.centerYAnchor.constraint(equalTo: self.view.bottomAnchor, constant: self.mapView.frame.size.height - 60).isActive = true
+            
+                
+                if (MapsViewController.user != nil){
+                    MapsViewController.userEmailId = MapsViewController.user!.email!
+                    print(MapsViewController.userEmailId)
+                    print("\n\n\n\nPrint User ki id : \n\n\n")
+                    print(MapsViewController.user!.uid)
+                    print(self.idTitleMap.keys)
+                    print("\n\nBefore\n\n")
+                    print(self.idTitleMap.keys)
+                    if ((self.idTitleMap[MapsViewController.user!.uid]) != nil){
+                        print("User has a marker")
+                        print("\n\n\nyo yo \(self.idTitleMap[MapsViewController.user!.uid]!.title)")
+                        
+                        print("\n\n\n\n\n\n\n\n\n\n\n\n")
+                        self.view.addSubview(self.buttonState)
+
+                        print("\n\n\n\n Maps ka user \(self.idTitleMap[MapsViewController.user!.uid]!.id)")
+                        
+
+                        self.buttonState.layer.cornerRadius = 10
+                        self.buttonState.layer.borderWidth = 1
+                        self.buttonState.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+                        self.buttonState.centerYAnchor.constraint(equalTo: self.mapView.topAnchor, constant: self.mapView.frame.size.height - 200).isActive = true
+                    }
+                    
+                    print("\n\nAfter\n\n")
+                    print(self.idTitleMap.keys)
+                }
+            }
+            else{
+                
+                MapsViewController.userEmailId = "Guest"
             }
             
             MapsViewController.markerList = MapsViewController.markerList.sorted(by: {$0.distance < $1.distance})
             
-            print("\n\n\n\n \(self.idTitleMap)")
             
             for i in stride(from: 0, to: MapsViewController.markerList.count, by: 1) {
                 let markerMap = GMSMarker()
                 let item =
-                    POIItem(position: CLLocationCoordinate2DMake(Double(MapsViewController.markerList[i].latitide) as! CLLocationDegrees, Double(MapsViewController.markerList[i].longitude) as! CLLocationDegrees), title: MapsViewController.markerList[i].id)
+                    POIItem(position: CLLocationCoordinate2DMake(Double(MapsViewController.markerList[i].latitide) as! CLLocationDegrees, Double(MapsViewController.markerList[i].longitude) as! CLLocationDegrees), title: MapsViewController.markerList[i].id, state: MapsViewController.markerList[i].state)
                 self.clusterManager.add(item)
-//                var chat = UIImage(named: "8onTc")
-//                markerMap.icon = self.drawText(text:MapsViewController.markerList[i].title, inImage: chat!)
+                //                var chat = UIImage(named: "8onTc")
+                //                markerMap.icon = self.drawText(text:MapsViewController.markerList[i].title, inImage: chat!)
                 markerMap.position = CLLocationCoordinate2D(latitude: Double(MapsViewController.markerList[i].latitide) as! CLLocationDegrees, longitude: Double(MapsViewController.markerList[i].longitude) as! CLLocationDegrees)
                 markerMap.title = MapsViewController.markerList[i].id
-//                markerMap.map = self.mapView
+                //                markerMap.map = self.mapView
             }
         })
+        
+    }
+    
+    //First method called in this file. checks whether the location is enabled or not. If not sends a dummy location and executes restOfCode() function. If location is enabled, then takes the current user location and executes estOfCode() function.
+    override func viewDidLoad() {
+        
+        super.viewDidLoad()
+        
+        if (CLLocationManager.locationServicesEnabled()){
+//            print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAutomatic Sign In: \(MapsViewController.user?.email)")
+            switch CLLocationManager.authorizationStatus() {
+            case .notDetermined, .restricted, .denied:
+                let camera = GMSCameraPosition.camera(withLatitude: 23.43, longitude: 118.23, zoom: 5)
+                
+                self.mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
+                view = self.mapView
+                
+                Toast.show(message: "Please turn on Location Services and restart the app to continue.", controller: self)
+                let alert = UIAlertController(title: "Location Services", message: "Please turn on location to continue. ", preferredStyle: UIAlertController.Style.alert)
+                
+                // add the actions (buttons)
+                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: {action in
+                    UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
+                    
+                }))
+                alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: {action in
+                    exit(-1)
+                }))
+                
+                self.present(alert, animated: true)
+                
+                MapsViewController.longitude = -121.9940569
+                MapsViewController.latitude = 37.3919265
+
+                restOfCode()
+                
+            case .authorizedAlways, .authorizedWhenInUse:
+                MapsViewController.longitude = AppDelegate.locationManager.location!.coordinate.longitude as! Double
+                MapsViewController.latitude = AppDelegate.locationManager.location!.coordinate.latitude as! Double
+                restOfCode()
+            }
+            
+        }
+        else {
+            
+            let camera = GMSCameraPosition.camera(withLatitude: 23.43, longitude: 118.23, zoom: 5)
+            
+            self.mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
+            view = self.mapView
+    
+            Toast.show(message: "Please turn on Location Services and restart the app to continue.", controller: self)
+            let alert = UIAlertController(title: "Location Services", message: "Please turn on location to continue. ", preferredStyle: UIAlertController.Style.alert)
+
+            // add the actions (buttons)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default, handler: {action in
+                UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
+
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel, handler: {action in
+                exit(-1)
+            }))
+            
+            self.present(alert, animated: true)
+            
+            MapsViewController.longitude = -121.9940569
+            MapsViewController.latitude = 37.3919265
+
+            restOfCode()
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -572,16 +770,15 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
             print("GPS allowed")
         }
         else {
-            print("GPS not allowed") 
+            print("GPS not allowed")
             return
         }
     }
-    
+
     func clusterManager(_ clusterManager: GMUClusterManager, didTap clusterItem: GMUClusterItem) -> Bool {
         let gmsMarker = clusterItem as! POIItem
         self.name = gmsMarker.title
         self.markerClickedName = gmsMarker.title
-//        print(gmsMarker.title)
         self.performSegue(withIdentifier: "MarkerClicked", sender: self)
         clusterManager.clearItems()
         return true
@@ -603,42 +800,43 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         
         let markerImage = UIImage(named: "marker50")!.withRenderingMode(.alwaysOriginal)
         
-        var text : String = self.idTitleMap[poi.title]!.title
-        var modtext : String = ""
-        if (text.count > 10) {
-            modtext = String(text.prefix(8)) + "..."
+        var text2 : String = self.idTitleMap[poi.title]!.title
+        print("\n\n\n\n\n\n\n")
+        print(self.idTitleMap[poi.title]!)
+        print(self.idTitleMap[poi.title]!.title)
+        print(self.idTitleMap[poi.title]!.costs[0])
+        print("\n\n\n\n\n\n\n")
+        var text3 = "   \(text2) | \(self.idTitleMap[poi.title]!.costs[0])"
+ 
+        var newMarkerView = UIView()
+        
+        print("State " + self.idTitleMap[poi.title]!.state)
+        if (self.idTitleMap[poi.title]!.state == "open") {
+            
+            newMarkerView.backgroundColor = UIColor.orange
         }
         else {
-            modtext = text
+            newMarkerView.backgroundColor = UIColor.gray
         }
+        newMarkerView.frame = CGRect.init(x: 0, y: 0, width: CGFloat(Double(text3.count*8)), height: 30)
         
+        var label = UILabel(frame: CGRect(x: 0, y: 0, width: newMarkerView.frame.size.width, height: newMarkerView.frame.size.height))
         
-        let markerImage2 = textToImage(drawText: "\(modtext) | \(self.idTitleMap[poi.title]!.costs[0])" as NSString, inImage: markerImage, atPoint: CGPoint(x: 80, y: 75))
+        label.text = text3
+        label.textColor = UIColor.white
+        label.center.x = newMarkerView.center.x
+        label.center.y = newMarkerView.center.y
+        newMarkerView.addSubview(label)
         
-//
-        let markerView = UIImageView(image: markerImage2)
-////
-//        let markerUIView = UIImageView(image: imageWithView(view: markerView))
-//
+        label.frame = CGRect.init(x: 0, y: 0, width: CGFloat(Double(text3.count*8)), height: 30)
         
+        newMarkerView.frame.size.width = CGFloat(Double(Double(text3.count)*8.5))
         
-//        marker.iconView = self.drawText(text: "\(self.idTitleMap[poi.title]!.title) | \(self.idTitleMap[poi.title]!.costs[0])", inImage: markerImage)
-//
-//        markerUIView.tintColor = UIColor.green
-//
-        marker.iconView = markerView
+        print("\n\n\n\nModText = \(text2.count)")
+        markerView.frame.size.width = markerViewLabel.frame.size.width
+        
+        marker.iconView = newMarkerView
 
-        
-//        let url = URL(string: "https://vectr.com/tmp/f7UTM8MVGs/aTlLLOPJY.svg?width=640&height=640&select=aTlLLOPJYpage0&source=page")
-//
-//        let anSVGImage: SVGKImage = SVGKImage(contentsOf: url)
-        
-//        if let image = UIImage(named: "marker50")!.withRenderingMode(.alwaysTemplate) {
-////            image.scale=0.1
-//            marker.iconView = self.drawText(text: "\(self.idTitleMap[poi.title]!.title) | \(self.idTitleMap[poi.title]!.costs[0])", inImage: image)
-//        }
-        
-        
     }
     
     func imageWithView(view:UIView) -> UIImage {
@@ -649,30 +847,8 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         return image!
     }
     
-//    func textToImage(drawText text: String, inImage image: UIImage, atPoint point: CGPoint) -> UIImage {
-//        let textColor = UIColor.black
-//        let textFont = UIFont(name: "Helvetica Bold", size: 12)!
-//
-//        let scale = UIScreen.main.scale
-//        UIGraphicsBeginImageContextWithOptions(image.size, false, scale)
-//
-//        let textFontAttributes = [
-//            NSAttributedString.Key.font: textFont,
-//            NSAttributedString.Key.foregroundColor: textColor,
-//            ] as [NSAttributedString.Key : Any]
-//        image.draw(in: CGRect(origin: CGPoint.zero, size: image.size))
-//
-//        let rect = CGRect(origin: point, size: image.size)
-//        text.draw(in: rect, withAttributes: textFontAttributes)
-//
-//        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-//        UIGraphicsEndImageContext()
-//
-//        return newImage!
-//    }
     
     func textToImage(drawText text: NSString, inImage image: UIImage, atPoint point: CGPoint) -> UIImage {
-        
         
         let scale = UIScreen.main.scale
         UIGraphicsBeginImageContextWithOptions(image.size, false, scale)
@@ -684,22 +860,15 @@ class MapsViewController: UIViewController, CLLocationManagerDelegate, GMSMapVie
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.alignment = .left
         
-        
-        
         let attrs = [NSAttributedString.Key.font: UIFont(name: "Helvetica Bold", size:12)!,NSAttributedString.Key.foregroundColor : UIColor.white , NSAttributedString.Key.paragraphStyle: paragraphStyle]
         
-        
         text.draw(with: rect, options: .usesLineFragmentOrigin, attributes: attrs, context: nil)
-        
-        
         
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
         return newImage!
     }
-
-    
 
 }
 
@@ -719,4 +888,3 @@ extension UIImage {
         return jpegData(compressionQuality: jpegQuality.rawValue)
     }
 }
-

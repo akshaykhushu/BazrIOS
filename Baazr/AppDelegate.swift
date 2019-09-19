@@ -14,29 +14,47 @@ import GoogleSignIn
 
 @UIApplicationMain
 
-class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate, CLLocationManagerDelegate{
 
     var window: UIWindow?
+    public static var locationManager = CLLocationManager()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        GMSServices.provideAPIKey("YOUR API KEY")
-        GMSPlacesClient.provideAPIKey("YOUR API KEY")
+        GMSServices.provideAPIKey("AIzaSyDOk2yQ4zxnkEzmzlI263Hh14htvxQG5ao")
+        GMSPlacesClient.provideAPIKey("AIzaSyDOk2yQ4zxnkEzmzlI263Hh14htvxQG5ao")
         FirebaseApp.configure()
+        
         
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
         GIDSignIn.sharedInstance().delegate = self
         
+        AppDelegate.locationManager.requestWhenInUseAuthorization()
+//        AppDelegate.locationManager.requestLocation()
+//        AppDelegate.locationManager.requestAlwaysAuthorization()
+//
+//
+//        AppDelegate.locationManager.startUpdatingLocation()
+//        AppDelegate.locationManager.startMonitoringSignificantLocationChanges()
+        
         Auth.auth().addStateDidChangeListener({ (auth, user) in
             if (user != nil && user!.isEmailVerified ){
-                // User is signed in.
                 print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAutomatic Sign In: \(user?.email)")
+                MapsViewController.user = user
+                MapsViewController.isGuest = false
+                MapsViewController.userEmailId = user!.email!
+                let storage = Storage.storage()
+                MapsViewController.storageRef = storage.reference().child(user!.uid)
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let initialViewController = storyboard.instantiateViewController(withIdentifier: "MainAppBaazr")
                 self.window!.rootViewController = initialViewController
                 return
+                
+                // User is signed in.
+                
             }
             else {
+                MapsViewController.isGuest = true
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let initialViewController = storyboard.instantiateViewController(withIdentifier: "NewUserBaazr")
                 self.window!.rootViewController = initialViewController
@@ -46,11 +64,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         
         var ref : DatabaseReference!
         ref = Database.database().reference()
-        let storage = Storage.storage()
-        
         UINavigationBar.appearance().backgroundColor = UIColor.orange
         return true
     }
+    
+        func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    
+            if locations.first != nil {
+                print("location:: (location)")
+            }
+    
+        }
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedWhenInUse {
+            print("GPS allowed")
+        }
+        else {
+            print("GPS not allowed")
+            return
+        }
+    }
+    
     
     @available(iOS 9.0, *)
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any])
@@ -71,6 +106,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
             print("\n\n\n\n\n\n\(error)")
             return
         }
+        
+        MapsViewController.isGuest = false
         
         guard let authentication = user.authentication else { return }
         let credential = GoogleAuthProvider.credential(withIDToken: authentication.idToken,
@@ -108,10 +145,65 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        
+//        Auth.auth().addStateDidChangeListener({ (auth, user) in
+//            if (user != nil && user!.isEmailVerified ){
+//                print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nAutomatic Sign In: \(user?.email)")
+//                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//                let initialViewController = storyboard.instantiateViewController(withIdentifier: "MainAppBaazr")
+//                self.window!.rootViewController = initialViewController
+//                return
+//
+//                // User is signed in.
+//
+//            }
+//            else {
+//                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//                let initialViewController = storyboard.instantiateViewController(withIdentifier: "NewUserBaazr")
+//                self.window!.rootViewController = initialViewController
+//                return
+//            }
+//        })
+        
+//
+//        if (CLLocationManager.locationServicesEnabled()){
+//            switch CLLocationManager.authorizationStatus() {
+//            case .notDetermined, .restricted, .denied:
+//                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//                let initialViewController = storyboard.instantiateViewController(withIdentifier: "MainAppBaazr")
+//                self.window!.rootViewController = initialViewController
+//                Toast.show(message: "Please turn on Location Services and restart the app to continue.", controller: initialViewController)
+//                return
+//
+//                    MapsViewController.longitude = -121.9940569
+//                    MapsViewController.latitude = 37.3919265
+//
+//
+//            case .authorizedAlways:
+//                print("Access")
+//            case .authorizedWhenInUse:
+//                print("Access")
+//            @unknown default:
+//                print("Access")
+//            }
+//        }
+//        else{
+//                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//                let initialViewController = storyboard.instantiateViewController(withIdentifier: "MainAppBaazr")
+//                self.window!.rootViewController = initialViewController
+//                Toast.show(message: "Please turn on Location Services and restart the app to continue.", controller: initialViewController)
+//                MapsViewController.longitude = -121.9940569
+//                MapsViewController.latitude = 37.3919265
+//                return
+//
+//            }
+//
+//
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

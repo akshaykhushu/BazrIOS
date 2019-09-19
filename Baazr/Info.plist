@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.0.4</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -38,15 +38,17 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>5</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>$(PRODUCT_NAME) camera use</string>
+	<string>This allows us to capture image and display it as a marker on maps.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Baazr needs your location to continue</string>
+	<string>Your location is used to show you nearby business</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Your location is used to show you nearby business</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Baazr needs your location to continue</string>
+	<string>Your location is used to show you nearby business</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Baazr wants to accept to photo use</string>
 	<key>UILaunchStoryboardName</key>

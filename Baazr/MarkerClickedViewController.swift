@@ -13,6 +13,8 @@ import MapKit
 
 class MarkerClickedViewController: UIViewController {
 
+    @IBOutlet weak var prevButton: UIButton!
+    @IBOutlet weak var nextButton: UIButton!
     @IBOutlet var markerClickedView: UIView!
     @IBOutlet weak var MarkerClickedImageView: UIImageView!
     @IBOutlet weak var MarkerClicedTitleTextView: UILabel!
@@ -43,6 +45,12 @@ class MarkerClickedViewController: UIViewController {
         
         var imageUrl = URL(string : imageLink[current])
         MarkerClickedImageView.setImage(url: imageUrl!)
+        
+        if (self.totalImagesInt == 1){
+            prevButton.isHidden = true
+            nextButton.isHidden = true
+        }
+        
         
     }
     
