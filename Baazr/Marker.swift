@@ -20,5 +20,6 @@ class Marker {
     var totalImages : String = ""
     var distance: Double = 0.0
     var state : String = ""
+    var reported : String = "False"
     
 }

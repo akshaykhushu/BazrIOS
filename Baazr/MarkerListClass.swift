@@ -16,13 +16,15 @@ class MarkerListClass {
     var id: String
     var description = [String]()
     var distance: Double
+    var reported: String
     
-    init(imageLink: [String], title: String, cost: [String], id: String, distance: Double, description: [String]) {
+    init(imageLink: [String], title: String, cost: [String], id: String, distance: Double, description: [String], reported: String) {
         self.imageLink = imageLink
         self.title = title
         self.cost = cost
         self.id = id
         self.distance = distance
         self.description = description
+        self.reported = reported
     }
 }

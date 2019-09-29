@@ -312,6 +312,7 @@
                         <outlet property="costTextView" destination="0zs-9n-UdH" id="XSw-t1-F7B"/>
                         <outlet property="currencyPicker" destination="sro-Rn-NLA" id="mbh-nW-TIH"/>
                         <outlet property="descTextView" destination="mzY-NM-XnQ" id="on7-Ok-tmp"/>
+                        <outlet property="eulaAgreeView" destination="G2Q-BP-qZE" id="0Me-Tj-d4G"/>
                         <outlet property="helpView" destination="kGR-l1-Ruv" id="uez-eX-ytc"/>
                         <outlet property="imageView" destination="qsh-cF-ppy" id="BTU-lO-tbS"/>
                         <outlet property="listViewButton" destination="Wwv-IN-qCm" id="TPG-6N-pNM"/>
@@ -325,6 +326,7 @@
                         <outlet property="plusBtn" destination="8mE-Pk-IaA" id="bYR-LU-4SY"/>
                         <outlet property="takePictureBtn" destination="vCc-kM-8nD" id="3HC-9c-IBJ"/>
                         <outlet property="titleTextView" destination="s2q-Ta-Edc" id="0t8-Gr-sGJ"/>
+                        <outlet property="uelaAgreeBtn" destination="PYh-qv-5pl" id="wnk-mc-1xl"/>
                         <outlet property="uploadBtn" destination="JRf-tQ-iCR" id="y8Q-kj-GeX"/>
                         <segue destination="PcI-Ly-Nhu" kind="show" identifier="MarkerClicked" id="ZMC-ND-686"/>
                         <segue destination="3Qy-me-fE0" kind="show" identifier="SignOut" id="Tp0-n2-cM8"/>
@@ -439,8 +441,8 @@
                                 <action selector="changeState:" destination="BYZ-38-t0r" eventType="touchUpInside" id="6iZ-EH-Mcp"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vCc-kM-8nD">
-                            <rect key="frame" x="182" y="551" width="51" height="50"/>
+                        <button opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vCc-kM-8nD">
+                            <rect key="frame" x="182" y="762" width="50" height="50"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="Circle-icons-camera"/>
                             <connections>
@@ -456,7 +458,7 @@
                 </view>
                 <view contentMode="scaleToFill" id="Zl7-tI-MkS">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="90"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wwv-IN-qCm">
                             <rect key="frame" x="331.33333333333331" y="34" width="82.666666666666686" height="56"/>
@@ -602,6 +604,126 @@ Once the image is captured, enter the name of your business, a brief description
                     </constraints>
                     <viewLayoutGuide key="safeArea" id="WC7-7f-Ffp"/>
                 </view>
+                <view contentMode="scaleToFill" id="G2Q-BP-qZE">
+                    <rect key="frame" x="0.0" y="0.0" width="250" height="630"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PYh-qv-5pl">
+                            <rect key="frame" x="0.0" y="623" width="250" height="36.666666666666629"/>
+                            <color key="backgroundColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <state key="normal" title="Agree"/>
+                            <connections>
+                                <action selector="eulaAgreeButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="M6b-6r-PiQ"/>
+                            </connections>
+                        </button>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" editable="NO" usesAttributedText="YES" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b7D-EG-Vbu">
+                            <rect key="frame" x="0.0" y="12" width="250" height="508"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <viewLayoutGuide key="safeArea" id="AR2-fD-vGd"/>
+                            <attributedString key="attributedText">
+                                <fragment content="END USER LICENSE AGREEMENT (EULA)">
+                                    <attributes>
+                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <font key="NSFont" size="14" name="Helvetica-Bold"/>
+                                        <font key="NSOriginalFont" size="14" name="Helvetica-Bold"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment>
+                                    <string key="content" base64-UTF8="YES">
+DQo
+</string>
+                                    <attributes>
+                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <font key="NSFont" size="14" name=".SFNSText"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment>
+                                    <mutableString key="content">
+This End-User License Agreement (EULA) is a legal agreement between Baazr Inc and general user of this Software for the software product identified above, which includes computer software and may include associated media, printed materials, and “online” or electronic documentation (“Software Product”).
+By installing, copying, or otherwise using the Software Product, you agree to be bounded by the terms of this EULA.  If you do not agree to the terms of this EULA, do not install or use the Software Product.
+SOFTWARE PRODUCT LICENSE 
+a) Baazr is being distributed as free commercial use e-commerce software It may be included with CD-ROM/DVD-ROM distributions. You are NOT allowed to make a charge for distributing this Software (either for profit or merely to recover your media and distribution costs) whether as a stand-alone product, or as part of a compilation or anthology, nor to use it for supporting your business or customers. It may be distributed freely on any website or through any other distribution mechanism, as long as no part of it is changed in any way.
+</mutableString>
+                                    <attributes>
+                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <font key="NSFont" metaFont="system" size="14"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment content="1. Grant of License.">
+                                    <attributes>
+                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <font key="NSFont" size="14" name="Helvetica-Bold"/>
+                                        <font key="NSOriginalFont" size="14" name="Helvetica-Bold"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment>
+                                    <mutableString key="content"> This EULA grants you the following rights:
+Installation and Use. You may install and use an unlimited number of copies of the Software Product.
+Reproduction and Distribution. You may reproduce and distribute an unlimited number of copies of the Software Product; provided that each copy shall be a true and complete copy, including all copyright and trademark notices, and shall be accompanied by a copy of this EULA.
+Copies of the Software Product may be distributed as a standalone product or included with your own product as long as The Software Product is not sold or included in a product or package that intends to receive benefits through the inclusion of the Software Product.
+The Software Product may be included in any free or non-profit packages or products.
+</mutableString>
+                                    <attributes>
+                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <font key="NSFont" metaFont="system" size="14"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment content="2. Description of Rights and Limitations. ">
+                                    <attributes>
+                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <font key="NSFont" size="14" name="Helvetica-Bold"/>
+                                        <font key="NSOriginalFont" size="14" name="Helvetica-Bold"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment>
+                                    <mutableString key="content">Limitations on Reverse Engineering, Decompilation, Disassembly and change (add, delete or modify) the resources in the compiled the assembly. You may not reverse engineer, decompile, or disassemble the Software Product, except and only to the extent that such activity is expressly permitted by applicable law notwithstanding this limitation.
+Update and Maintenance: Updates are free of charge
+Separation of Components. The Software Product is licensed as a single product. Its component parts may not be separated for use on more than one computer.
+Software Transfer.  You may permanently transfer all of your rights under this EULA, provided the recipient agrees to the terms of this EULA.
+Termination.  Without prejudice to any other rights, the Author of this Software may terminate this EULA if you fail to comply with the terms and conditions of this EULA. In such event, you must destroy all copies of the Software Product and all of its component parts.
+</mutableString>
+                                    <attributes>
+                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <font key="NSFont" metaFont="system" size="14"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment content="3. Copyright. ">
+                                    <attributes>
+                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <font key="NSFont" size="14" name="Helvetica-Bold"/>
+                                        <font key="NSOriginalFont" size="14" name="Helvetica-Bold"/>
+                                    </attributes>
+                                </fragment>
+                                <fragment>
+                                    <mutableString key="content"> All title and copyrights in and to the Software Product (including but not limited to any images, photographs, clipart, libraries, and examples incorporated into the Software Product), the accompanying printed materials, and any copies of the Software Product are owned by the Author of this Software. The Software Product is protected by copyright laws and international treaty provisions. Therefore, you must treat the Software Product like any other copyrighted material. The licensed users or licensed company can use all functions, example, templates, clipart, libraries and symbols in the Software Product to create new diagrams and distribute the diagrams.
+LIMITED WARRANTY
+No Warranties.  The Author of this Software expressly disclaims any warranty for the Software Product. The Software Product and any related documentation is provided “as is” without warranty of any kind, either express or implied, including, without limitation, the implied warranties or merchantability, fitness for a particular purpose, or noninfringement. The entire risk arising out of use or performance of the Software Product remains with you.
+No Liability for Damages.  In no event shall the author of this Software be liable for any special, consequential, incidental or indirect damages whatsoever (including, without limitation, damages for loss of business profits, business interruption, loss of business information, or any other pecuniary loss) arising out of the use of or inability to use this product, even if the Author of this Software is aware of the possibility of such damages and known defects.
+</mutableString>
+                                    <attributes>
+                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <font key="NSFont" metaFont="system" size="14"/>
+                                    </attributes>
+                                </fragment>
+                            </attributedString>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="b7D-EG-Vbu" firstAttribute="centerY" secondItem="h5S-zE-khO" secondAttribute="centerY" id="BaS-Tz-vez"/>
+                        <constraint firstItem="PYh-qv-5pl" firstAttribute="height" secondItem="h5S-zE-khO" secondAttribute="height" multiplier="0.06" id="LdE-Sl-o1F"/>
+                        <constraint firstItem="b7D-EG-Vbu" firstAttribute="top" secondItem="h5S-zE-khO" secondAttribute="top" constant="20" id="QvM-6w-Lk2"/>
+                        <constraint firstItem="b7D-EG-Vbu" firstAttribute="height" secondItem="G2Q-BP-qZE" secondAttribute="height" multiplier="0.8" id="Y1o-0m-oI1"/>
+                        <constraint firstItem="PYh-qv-5pl" firstAttribute="width" secondItem="G2Q-BP-qZE" secondAttribute="width" id="dS8-sD-vHZ"/>
+                        <constraint firstItem="b7D-EG-Vbu" firstAttribute="centerX" secondItem="h5S-zE-khO" secondAttribute="centerX" id="gmc-l6-bNE"/>
+                        <constraint firstItem="PYh-qv-5pl" firstAttribute="top" secondItem="b7D-EG-Vbu" secondAttribute="bottom" constant="13" id="waO-78-0md"/>
+                        <constraint firstItem="b7D-EG-Vbu" firstAttribute="width" secondItem="G2Q-BP-qZE" secondAttribute="width" id="yO6-P5-Uzu"/>
+                    </constraints>
+                    <viewLayoutGuide key="safeArea" id="h5S-zE-khO"/>
+                </view>
             </objects>
             <point key="canvasLocation" x="137.68115942028987" y="78.348214285714278"/>
         </scene>
@@ -623,26 +745,38 @@ Once the image is captured, enter the name of your business, a brief description
                                     <subviews>
                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l4q-FE-1wt">
                                             <rect key="frame" x="0.0" y="-2" width="414" height="302"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <accessibility key="accessibilityConfiguration" identifier="ListViewImageView"/>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FP6-ye-3BB">
-                                            <rect key="frame" x="20" y="214" width="137" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FP6-ye-3BB">
+                                            <rect key="frame" x="40" y="214" width="137" height="21"/>
                                             <accessibility key="accessibilityConfiguration" identifier="ListViewTitleView"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="0gt-CD-nXc"/>
+                                                <constraint firstAttribute="width" constant="137" id="dF4-TE-a4G"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wYo-Ih-LCr">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wYo-Ih-LCr">
                                             <rect key="frame" x="165" y="213" width="185" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <accessibility key="accessibilityConfiguration" identifier="ListViewCostView"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="hAh-nL-qL2"/>
+                                                <constraint firstAttribute="width" constant="185" id="pnb-24-apJ"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottomMargin" secondItem="FP6-ye-3BB" secondAttribute="bottom" constant="54" id="brA-fI-859"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="wYo-Ih-LCr" secondAttribute="trailing" constant="44" id="go0-WY-UKd"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="wYo-Ih-LCr" secondAttribute="bottom" constant="55" id="uFH-O1-Ldc"/>
+                                        <constraint firstItem="FP6-ye-3BB" firstAttribute="leading" secondItem="Zuf-BX-KIf" secondAttribute="leadingMargin" constant="20" id="x2z-Yg-mFZ"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <accessibility key="accessibilityConfiguration">
                                     <accessibilityTraits key="traits" notEnabled="YES" adjustable="YES"/>
@@ -740,9 +874,8 @@ Once the image is captured, enter the name of your business, a brief description
                                 </attributedString>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4ka-3R-bDr">
-                                <rect key="frame" x="318" y="142" width="96" height="96"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4ka-3R-bDr">
+                                <rect key="frame" x="331.33333333333331" y="20" width="82.666666666666686" height="368"/>
                                 <accessibility key="accessibilityConfiguration" identifier="MarkerClickedNext" label="Next"/>
                                 <state key="normal" title="Next">
                                     <color key="titleColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -751,26 +884,27 @@ Once the image is captured, enter the name of your business, a brief description
                                     <action selector="MarkerClickedNextButtonPressed:" destination="PcI-Ly-Nhu" eventType="touchUpInside" id="11b-Ea-ff2"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xIK-5q-oZC">
-                                <rect key="frame" x="0.0" y="142" width="95" height="96"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xIK-5q-oZC">
+                                <rect key="frame" x="0.0" y="20" width="82.666666666666671" height="368"/>
                                 <accessibility key="accessibilityConfiguration" identifier="MarkerClickedPrevious"/>
                                 <state key="normal" title="Previous"/>
                                 <connections>
                                     <action selector="MarkerClickedPrevButtonPressed:" destination="PcI-Ly-Nhu" eventType="touchUpInside" id="bJj-P6-P5J"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0kj-Ha-AFY">
-                                <rect key="frame" x="91" y="46" width="227" height="331"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0kj-Ha-AFY">
+                                <rect key="frame" x="91" y="20" width="227" height="368"/>
                                 <connections>
                                     <action selector="imageButtonTapped:" destination="PcI-Ly-Nhu" eventType="touchUpInside" id="sqN-Iy-FrK"/>
                                     <segue destination="7Ss-ok-q4p" kind="show" identifier="FullImage" id="usZ-cJ-muB"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XHd-pl-J6w">
-                                <rect key="frame" x="240" y="666" width="134" height="30"/>
+                                <rect key="frame" x="274" y="666" width="100" height="30"/>
                                 <color key="backgroundColor" name="systemOrangeColor" catalog="System" colorSpace="catalog"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="Nsx-CL-4Zi"/>
+                                </constraints>
                                 <state key="normal" title="DIRECTIONS">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
@@ -801,26 +935,51 @@ Once the image is captured, enter the name of your business, a brief description
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Cv-Bh-FoO">
+                                <rect key="frame" x="0.0" y="716" width="414" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="dNA-f0-7LM"/>
+                                    <constraint firstAttribute="width" constant="110" id="fA7-aK-9hY"/>
+                                </constraints>
+                                <state key="normal" title="Report this post"/>
+                                <connections>
+                                    <action selector="reportPostClicked:" destination="PcI-Ly-Nhu" eventType="touchUpInside" id="lci-HE-ta5"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <accessibility key="accessibilityConfiguration" identifier="MarkerClickedView"/>
                         <constraints>
+                            <constraint firstItem="4ka-3R-bDr" firstAttribute="height" secondItem="BTu-k7-pzb" secondAttribute="height" id="3Zg-t0-pse"/>
                             <constraint firstItem="EZ6-j1-lWy" firstAttribute="trailing" secondItem="XHd-pl-J6w" secondAttribute="trailing" constant="40" id="4ef-LX-PS8"/>
                             <constraint firstItem="EZ6-j1-lWy" firstAttribute="bottom" secondItem="of8-OI-YsU" secondAttribute="bottom" constant="40" id="Cl5-rw-8V2"/>
+                            <constraint firstItem="6Cv-Bh-FoO" firstAttribute="leading" secondItem="EZ6-j1-lWy" secondAttribute="leading" id="F7W-lE-GQS"/>
+                            <constraint firstItem="0kj-Ha-AFY" firstAttribute="centerX" secondItem="BTu-k7-pzb" secondAttribute="centerX" id="FL1-KJ-DMT"/>
                             <constraint firstItem="wNx-cK-HvF" firstAttribute="centerX" secondItem="EZ6-j1-lWy" secondAttribute="centerX" id="Fqa-8r-rFf"/>
                             <constraint firstItem="of8-OI-YsU" firstAttribute="leading" secondItem="EZ6-j1-lWy" secondAttribute="leading" constant="40" id="Gft-kf-a0w"/>
                             <constraint firstItem="EZ6-j1-lWy" firstAttribute="trailing" secondItem="9fs-A2-kbd" secondAttribute="trailing" constant="30" id="L6v-ND-A21"/>
                             <constraint firstItem="GC9-cU-tUX" firstAttribute="leading" secondItem="EZ6-j1-lWy" secondAttribute="leading" constant="20" id="LhI-vi-mtf"/>
+                            <constraint firstItem="6Cv-Bh-FoO" firstAttribute="centerX" secondItem="EZ6-j1-lWy" secondAttribute="centerX" id="M3R-dX-PXP"/>
+                            <constraint firstItem="xIK-5q-oZC" firstAttribute="height" secondItem="BTu-k7-pzb" secondAttribute="height" id="OjN-H5-sfX"/>
                             <constraint firstItem="BTu-k7-pzb" firstAttribute="height" secondItem="7Ge-qg-d9d" secondAttribute="height" multiplier="0.5" id="PhJ-Rz-WmD"/>
+                            <constraint firstItem="xIK-5q-oZC" firstAttribute="width" secondItem="BTu-k7-pzb" secondAttribute="width" multiplier="0.2" id="Qpj-er-PQ3"/>
                             <constraint firstItem="wNx-cK-HvF" firstAttribute="top" secondItem="BTu-k7-pzb" secondAttribute="bottom" constant="20" id="SaQ-5Y-uec"/>
+                            <constraint firstItem="xIK-5q-oZC" firstAttribute="leading" secondItem="EZ6-j1-lWy" secondAttribute="leading" id="T6i-qb-PB8"/>
                             <constraint firstItem="wNx-cK-HvF" firstAttribute="leading" secondItem="EZ6-j1-lWy" secondAttribute="leading" constant="20" id="TUw-hh-0xh"/>
                             <constraint firstItem="9fs-A2-kbd" firstAttribute="leading" secondItem="EZ6-j1-lWy" secondAttribute="leading" constant="20" id="Uno-rU-moB"/>
                             <constraint firstItem="GC9-cU-tUX" firstAttribute="top" secondItem="9fs-A2-kbd" secondAttribute="bottom" constant="10" id="Vsc-ZH-A7J"/>
+                            <constraint firstItem="0kj-Ha-AFY" firstAttribute="top" secondItem="EZ6-j1-lWy" secondAttribute="top" id="Wmk-nr-NJI"/>
+                            <constraint firstItem="0kj-Ha-AFY" firstAttribute="width" secondItem="BTu-k7-pzb" secondAttribute="width" multiplier="0.6" id="ZoM-w1-PkA"/>
                             <constraint firstItem="9fs-A2-kbd" firstAttribute="top" secondItem="wNx-cK-HvF" secondAttribute="bottom" constant="5" id="edt-Vb-2P5"/>
+                            <constraint firstItem="4ka-3R-bDr" firstAttribute="trailing" secondItem="EZ6-j1-lWy" secondAttribute="trailing" id="hmZ-W9-WJ7"/>
+                            <constraint firstItem="4ka-3R-bDr" firstAttribute="width" secondItem="BTu-k7-pzb" secondAttribute="width" multiplier="0.2" id="hn8-AP-jlQ"/>
                             <constraint firstItem="EZ6-j1-lWy" firstAttribute="trailing" secondItem="GC9-cU-tUX" secondAttribute="trailing" constant="20" id="iou-2R-iBq"/>
+                            <constraint firstItem="0kj-Ha-AFY" firstAttribute="height" secondItem="BTu-k7-pzb" secondAttribute="height" id="kv4-KE-DOD"/>
+                            <constraint firstItem="4ka-3R-bDr" firstAttribute="top" secondItem="EZ6-j1-lWy" secondAttribute="top" id="ld8-Lz-So3"/>
+                            <constraint firstItem="6Cv-Bh-FoO" firstAttribute="bottom" secondItem="EZ6-j1-lWy" secondAttribute="bottom" constant="5" id="rd5-7l-8TR"/>
                             <constraint firstItem="EZ6-j1-lWy" firstAttribute="bottom" secondItem="XHd-pl-J6w" secondAttribute="bottom" constant="40" id="scV-4d-JK9"/>
                             <constraint firstItem="BTu-k7-pzb" firstAttribute="width" secondItem="7Ge-qg-d9d" secondAttribute="width" id="tSn-vD-cJK"/>
-                            <constraint firstItem="XHd-pl-J6w" firstAttribute="leading" secondItem="of8-OI-YsU" secondAttribute="trailing" constant="100" id="xAS-PT-pqF"/>
+                            <constraint firstItem="xIK-5q-oZC" firstAttribute="top" secondItem="EZ6-j1-lWy" secondAttribute="top" id="uys-2z-DEp"/>
                             <constraint firstItem="EZ6-j1-lWy" firstAttribute="trailing" secondItem="wNx-cK-HvF" secondAttribute="trailing" constant="20" id="xfn-01-Ege"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="EZ6-j1-lWy"/>
@@ -831,9 +990,11 @@ Once the image is captured, enter the name of your business, a brief description
                         <outlet property="MarkerClickedCostTextView" destination="9fs-A2-kbd" id="3So-Qs-jIv"/>
                         <outlet property="MarkerClickedDescTextView" destination="GC9-cU-tUX" id="YSl-TX-gBl"/>
                         <outlet property="MarkerClickedImageView" destination="BTu-k7-pzb" id="ofi-0g-dxd"/>
+                        <outlet property="fullScreenImageButton" destination="0kj-Ha-AFY" id="ckc-My-ISz"/>
                         <outlet property="markerClickedView" destination="7Ge-qg-d9d" id="nIx-NL-2lU"/>
                         <outlet property="nextButton" destination="4ka-3R-bDr" id="Ohz-e9-g08"/>
                         <outlet property="prevButton" destination="xIK-5q-oZC" id="2iJ-bw-yTa"/>
+                        <outlet property="reportBtn" destination="6Cv-Bh-FoO" id="CyB-Eg-DJ8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="U8j-Og-lLg" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -848,9 +1009,8 @@ Once the image is captured, enter the name of your business, a brief description
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XDv-tT-bYe">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XDv-tT-bYe">
                                 <rect key="frame" x="0.0" y="20" width="414" height="49"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="31"/>
                                 <state key="normal" title="Back">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -860,12 +1020,18 @@ Once the image is captured, enter the name of your business, a brief description
                                     <segue destination="h05-ae-sCw" kind="unwind" unwindAction="unwindToMarkerClicked:" id="rEz-DQ-2Ev"/>
                                 </connections>
                             </button>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mrd-lH-cOO">
-                                <rect key="frame" x="0.0" y="186" width="414" height="377"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Mrd-lH-cOO">
+                                <rect key="frame" x="0.0" y="157.33333333333334" width="414" height="441.33333333333326"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Mrd-lH-cOO" firstAttribute="centerX" secondItem="6Go-8F-VcP" secondAttribute="centerX" id="0dJ-OG-jNU"/>
+                            <constraint firstItem="Mrd-lH-cOO" firstAttribute="height" secondItem="guF-0A-tdy" secondAttribute="height" multiplier="0.6" id="K14-A5-Y8N"/>
+                            <constraint firstItem="XDv-tT-bYe" firstAttribute="centerX" secondItem="6Go-8F-VcP" secondAttribute="centerX" id="T7a-Mk-Jvz"/>
+                            <constraint firstItem="Mrd-lH-cOO" firstAttribute="centerY" secondItem="6Go-8F-VcP" secondAttribute="centerY" id="qmw-Ad-FIG"/>
+                            <constraint firstItem="Mrd-lH-cOO" firstAttribute="width" secondItem="guF-0A-tdy" secondAttribute="width" id="tLb-GF-vV6"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Go-8F-VcP"/>
                     </view>
                     <connections>
@@ -885,8 +1051,8 @@ Once the image is captured, enter the name of your business, a brief description
         <image name="search_bar_png_1219542" width="621" height="86"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ZMC-ND-686"/>
+        <segue reference="HVo-V2-YwS"/>
         <segue reference="Buh-9d-sAo"/>
-        <segue reference="HhM-a4-dMv"/>
+        <segue reference="Qhy-mF-KN5"/>
     </inferredMetricsTieBreakers>
 </document>

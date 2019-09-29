@@ -28,9 +28,11 @@ class ListViewController: UITableViewController, UISearchBarDelegate {
             var distanceInMeters = co0.distance(from: co1) / 1609.344
             distanceInMeters = round(distanceInMeters/0.01)*0.01
             distanceInMeters = distanceInMeters.truncate(places: 2)
-            var markerListClass1 = MarkerListClass(imageLink: MapsViewController.markerList[i].bitmaps, title: MapsViewController.markerList[i].title, cost: MapsViewController.markerList[i].costs, id: MapsViewController.markerList[i].id, distance: distanceInMeters, description: MapsViewController.markerList[i].description )
+            var markerListClass1 = MarkerListClass(imageLink: MapsViewController.markerList[i].bitmaps, title: MapsViewController.markerList[i].title, cost: MapsViewController.markerList[i].costs, id: MapsViewController.markerList[i].id, distance: distanceInMeters, description: MapsViewController.markerList[i].description, reported: MapsViewController.markerList[i].reported )
             
-            tempData.append(markerListClass1)
+            if ( MapsViewController.markerList[i].reported == "False"){
+                tempData.append(markerListClass1)
+            }
         }
         
         return tempData
@@ -54,9 +56,6 @@ class ListViewController: UITableViewController, UISearchBarDelegate {
     }
     
     
-//    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-//        <#code#>
-//    }
     @IBAction func homeBtnPressed(_ sender: Any) {
         self.performSegue(withIdentifier: "HomeView", sender: self)
     }
@@ -113,6 +112,7 @@ class ListViewController: UITableViewController, UISearchBarDelegate {
                     vc.id = MapsViewController.markerList[i].id
                     vc.nameLabel = MapsViewController.markerList[i].title
                     vc.descLabel = MapsViewController.markerList[i].description
+                    vc.reported = MapsViewController.markerList[i].reported
                     vc.totalImages = MapsViewController.markerList[i].totalImages
                     vc.latitude = Double(MapsViewController.markerList[i].latitide) as! CLLocationDegrees
                     vc.longitude = Double(MapsViewController.markerList[i].longitude) as! CLLocationDegrees

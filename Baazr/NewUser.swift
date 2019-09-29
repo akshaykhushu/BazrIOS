@@ -76,7 +76,7 @@ class NewUser: UIViewController, GIDSignInUIDelegate {
     
     @IBAction func NewUserRegister(_ sender: Any) {
         
-        if ((emailIdTextField.text == nil) || (emailIdTextField.text! == "") || !(emailIdTextField.text!.contains("@")) || !(emailIdTextField.text!.contains(".com"))){
+        if ((emailIdTextField.text == nil) || (emailIdTextField.text! == "") || !(emailIdTextField.text!.contains("@"))){
             self.view.endEditing(true)
             Toast.show(message: "Please Enter correct Email ID", controller: self)
             return
@@ -86,7 +86,7 @@ class NewUser: UIViewController, GIDSignInUIDelegate {
             self.view.endEditing(true)
             return
         }
-        
+        print("Executed")
         
         Auth.auth().createUser(withEmail: emailIdTextField.text!, password: pwdTextField.text!, completion: {(user, error) in
             
@@ -119,7 +119,7 @@ class NewUser: UIViewController, GIDSignInUIDelegate {
     
     @IBAction func AlreadyCreatedUserSignIn(_ sender: Any) {
         
-        if ((alreadyCreatedUserEmailID.text == nil) || (alreadyCreatedUserEmailID.text! == "") || !(alreadyCreatedUserEmailID.text!.contains("@")) || !(alreadyCreatedUserEmailID.text!.contains(".com"))){
+        if ((alreadyCreatedUserEmailID.text == nil) || (alreadyCreatedUserEmailID.text! == "") || !(alreadyCreatedUserEmailID.text!.contains("@"))){
             self.view.endEditing(true)
             Toast.show(message: "Please Enter correct Email ID", controller: self)
             return

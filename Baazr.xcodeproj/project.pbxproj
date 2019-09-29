@@ -87,6 +87,7 @@
 		EED4B6E122BAE40100023466 /* libKingfisher.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libKingfisher.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EED4B6E322BAE40700023466 /* libLightbox.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libLightbox.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		EEDB958622BACC16006C760B /* MarkerClickedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerClickedViewController.swift; sourceTree = "<group>"; };
+		EEDB981F23012194008C55BC /* Baazr.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Baazr.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +167,7 @@
 		EE5C08AD227CC4FA008FD2EF /* Baazr */ = {
 			isa = PBXGroup;
 			children = (
+				EEDB981F23012194008C55BC /* Baazr.entitlements */,
 				EE63905122AEFFD400386B6C /* GoogleService-Info.plist */,
 				EE5C08AE227CC4FA008FD2EF /* AppDelegate.swift */,
 				EEAECF1822BD731F006FD862 /* iconGene.swift */,
@@ -277,6 +279,38 @@
 				TargetAttributes = {
 					EE5C08AA227CC4FA008FD2EF = {
 						CreatedOnToolsVersion = 10.2;
+						SystemCapabilities = {
+							com.apple.AccessWiFi = {
+								enabled = 0;
+							};
+							com.apple.ApplePay = {
+								enabled = 0;
+							};
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 0;
+							};
+							com.apple.AutoFillCredentialProvider = {
+								enabled = 0;
+							};
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+							com.apple.ClassKit = {
+								enabled = 0;
+							};
+							com.apple.DataProtection = {
+								enabled = 0;
+							};
+							com.apple.GameCenter.iOS = {
+								enabled = 0;
+							};
+							com.apple.HealthKit = {
+								enabled = 0;
+							};
+							com.apple.SafariKeychain = {
+								enabled = 0;
+							};
+						};
 					};
 					EE5C08BE227CC4FB008FD2EF = {
 						CreatedOnToolsVersion = 10.2;

@@ -10,9 +10,12 @@ import UIKit
 import Cache
 import Imaginary
 import MapKit
+import Firebase
 
 class MarkerClickedViewController: UIViewController {
 
+    @IBOutlet weak var fullScreenImageButton: UIButton!
+    @IBOutlet weak var reportBtn: UIButton!
     @IBOutlet weak var prevButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet var markerClickedView: UIView!
@@ -22,6 +25,7 @@ class MarkerClickedViewController: UIViewController {
     @IBOutlet weak var HomeButton: UIButton!
     @IBOutlet weak var MarkerClickedDescTextView: UILabel!
     var imageLink = [String]()
+    var ref : DatabaseReference?
     var costLabel = [String]()
     var descLabel = [String]()
     var latitude: CLLocationDegrees = 0.0
@@ -31,6 +35,17 @@ class MarkerClickedViewController: UIViewController {
     var totalImages = ""
     var totalImagesInt = Int()
     var id = ""
+    var reported = ""
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        
+        let alert = UIAlertController(title: "This image has been reported", message: "To uncover, please press \"Uncover Picture\" to see", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Close", style: .default, handler: nil))
+        self.present(alert, animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         current = 0
@@ -42,16 +57,85 @@ class MarkerClickedViewController: UIViewController {
         self.totalImagesInt = Int(totalImages)!
         print("Marker Clicked " + id)
         print("\n\n\n\nLongitude    \(self.longitude)" )
+
+        print("\n\n\nReported: " + self.reported)
         
-        var imageUrl = URL(string : imageLink[current])
-        MarkerClickedImageView.setImage(url: imageUrl!)
+        
+        if (self.reported == "True"){
+            MarkerClickedImageView.image = nil
+            reportBtn.setTitle("Uncover picture", for: UIControl.State.normal)
+            fullScreenImageButton.isHidden = true
+            prevButton.isHidden = true
+            nextButton.isHidden = true
+        }
+        else{
+            
+            var imageUrl = URL(string : imageLink[current])
+            MarkerClickedImageView.setImage(url: imageUrl!)
+            
+        }
+        
+        
         
         if (self.totalImagesInt == 1){
             prevButton.isHidden = true
             nextButton.isHidden = true
         }
+
+    }
+    
+    
+    @IBAction func reportPostClicked(_ sender: Any) {
+        
+        if (reportBtn.currentTitle == "Uncover picture"){
+            reportedYes()
+        }
+        else{
+            
+            
+            let alert = UIAlertController(title: "Report this post?", message: "Are you sure you want to report this post?", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { action in
+                self.reportedYes()
+            }))
+            alert.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+            self.present(alert, animated: true)
+        }
         
         
+    }
+    
+    func reportedYes(){
+        if (reported == "True"){
+            reported = "False"
+            fullScreenImageButton.isHidden = false
+            prevButton.isHidden = false
+            nextButton.isHidden = false
+            if (self.totalImagesInt == 1){
+                prevButton.isHidden = true
+                nextButton.isHidden = true
+            }
+            reportBtn.setTitle("Report this post", for: UIControl.State.normal)
+        }
+        else{
+            reported = "True"
+            fullScreenImageButton.isHidden = true
+            prevButton.isHidden = true
+            nextButton.isHidden = true
+            reportBtn.setTitle("Uncover picture", for: UIControl.State.normal)
+            Toast.show(message: "An action will be taken in 24hrs regarding the user", controller: self)
+        }
+        var ref: DatabaseReference!
+        ref = Database.database().reference().child(id)
+        ref.child("Reported").setValue(String(reported))
+        
+        if (reported == "True"){
+            MarkerClickedImageView.image = nil
+        }
+        else {
+            var imageUrl = URL(string : imageLink[current])
+            MarkerClickedImageView.setImage(url: imageUrl!)
+        }
     }
     
     
@@ -80,6 +164,7 @@ class MarkerClickedViewController: UIViewController {
     }
     
     @IBAction func imageButtonTapped(_ sender: Any) {
+        
         self.performSegue(withIdentifier: "FullImage", sender: self)
     }
     
